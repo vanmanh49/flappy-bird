@@ -2,6 +2,8 @@
 
 A Flappy Bird clone built with React 19 and Vite 8. The playfield is drawn on a canvas and the HUD (score, "Get ready", game-over panel) is rendered by React on top of it.
 
+![Flappy Bird gameplay: the bird flying between pipes with a score of 1](docs/screenshot.png)
+
 ## Play
 
 Press **Space** or **Arrow Up**, click, or tap to flap. Fly through the gaps between the pipes; each pipe you pass scores a point. Hitting a pipe or the ground ends the run, and after a short pause the next flap starts a new one.
