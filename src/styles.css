@@ -1,0 +1,72 @@
+/* Layout: one screen. A portrait playfield sits between a slim title row and a one-line hint.
+   The light theme is daytime, the dark theme is night; the canvas paints from these tokens. */
+:root {
+  color-scheme: light dark;
+  --font-display: "Titan One", "Arial Black", Impact, sans-serif;
+  --font-body: Figtree, system-ui, "Segoe UI", sans-serif;
+  --bg: #d9ebe6; --ink: #15333b; --muted: #4d6b72;
+  --sky-top: #8fd3e8; --sky-bottom: #dff3e4; --orb: #fff3b0; --cloud: #ffffff; --hill: #9fd6b0;
+  --pipe: #2f9e6e; --pipe-light: #6fd0a0; --pipe-dark: #1c6b4a;
+  --ground: #e6c98a; --ground-dark: #b8944f; --grass: #86c95c;
+  --bird: #ffb52e; --wing: #ffd77a; --beak: #ef5a3c; --eye: #ffffff;
+  --outline: #1d2b33; --hud: #ffffff; --panel: #fbf3d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1424; --ink: #e3e9f6; --muted: #94a2bf;
+    --sky-top: #141c3a; --sky-bottom: #3a3566; --orb: #e8ecff; --cloud: #2b3158; --hill: #232a52;
+    --pipe: #2a8463; --pipe-light: #4fb088; --pipe-dark: #17513c;
+    --ground: #5a4a52; --ground-dark: #3d3140; --grass: #3f7a55;
+    --outline: #0a0f1c; --panel: #1c2444;
+  }
+}
+
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); }
+
+.app {
+  box-sizing: border-box; height: 100%; padding-inline: 16px; padding-block: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.bar {
+  width: var(--w, 100%); max-width: 100%;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+}
+h1 { margin: 0; font: 400 1.5rem/1 var(--font-display); letter-spacing: .01em; }
+.best { margin: 0; color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+.best output { color: var(--ink); }
+.stage {
+  flex: 1 1 0; min-height: 280px; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer;
+}
+.hint { margin: 0; text-align: center; color: var(--muted); font-size: .9rem; }
+
+/* --u is one playfield pixel, so the HUD scales with the canvas */
+.field {
+  --u: calc(var(--s) * 1px);
+  position: relative; width: var(--w); aspect-ratio: 2 / 3;
+  border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 3px var(--outline);
+}
+canvas { display: block; width: 100%; height: 100%; }
+
+.hud {
+  position: absolute; inset: 0; pointer-events: none;
+  font-family: var(--font-display); line-height: 1; text-align: center; color: var(--hud);
+}
+.hud :is(p, dt, dd) {
+  margin: 0; -webkit-text-stroke: calc(1em / 6) var(--outline); paint-order: stroke fill; stroke-linejoin: round;
+}
+.hud > * { position: absolute; left: 0; right: 0; }
+.score { top: calc(40 * var(--u)); font-size: calc(48 * var(--u)); }
+.title { top: calc(118 * var(--u)); font-size: calc(38 * var(--u)); }
+.prompt { top: calc(315 * var(--u)); font-size: calc(18 * var(--u)); }
+.prompt.late { animation: late .5s step-end; } /* RESTART_LOCK in game.js */
+@keyframes late { from { visibility: hidden; } }
+.panel {
+  top: calc(178 * var(--u)); left: calc(65 * var(--u)); right: calc(65 * var(--u)); height: calc(112 * var(--u));
+  box-sizing: border-box; margin: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+  background: var(--panel); border: calc(3 * var(--u)) solid var(--outline); border-radius: calc(10 * var(--u));
+}
+.panel dt { font-size: calc(16 * var(--u)); margin-bottom: calc(14 * var(--u)); }
+.panel dd { font-size: calc(40 * var(--u)); }
